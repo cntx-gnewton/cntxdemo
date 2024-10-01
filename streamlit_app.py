@@ -150,8 +150,9 @@ if st.button("Submit"):
 
             def genotype_match(row):
                 # Extract risk genotypes from the 'Risk Genotypes' column
-                risk_genotypes = re.findall(
-                    r'\b\w+\b', str(row['Risk Genotypes']))
+                # risk_genotypes = re.findall(
+                #     r'\b\w+\b', str(row['Risk Genotypes']))
+                risk_genotypes = [rgt.strip() for rgt in row['Risk Genotypes'].split()]
                 user_genotype = row['Genotype']
                 return user_genotype in risk_genotypes
 
@@ -278,4 +279,12 @@ if st.button("Submit"):
 
             
         else:
-            st.write(ingredient)
+            # st.write(ingredient)
+            st.markdown(
+                f"""
+                <div class="tooltip">
+                    <span style="color:white">{ingredient}</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
