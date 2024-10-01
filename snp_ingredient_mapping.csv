@@ -1,0 +1,11 @@
+﻿Gene,Genotype,Function,Affected Ingredients,Alternative Ingredients
+FLG,CC,Skin barrier function,"Surfactants, chemical exfoliants (AHAs, BHAs)","Non-foaming cleansers, PHAs (e.g., gluconolactone), ceramides, cholesterol, fatty acids"
+RAR,GG,"Retinoid metabolism, skin cell regulation","Retinoids (retinol, tretinoin)","Bakuchiol, peptides (e.g., Matrixyl, copper peptides), niacinamide"
+CYP1A1,CC,Detoxification and metabolism,"Benzoyl peroxide, salicylic acid","Azelaic acid, willow bark extract, low concentration tea tree oil"
+TYR,GG,Melanin production,Hydroquinone (skin-lightening agents),"Tranexamic acid, licorice root extract, alpha arbutin, vitamin C"
+HLA-DQA1,AA,"Immune response, allergic reactions","Fragrances, colorants, synthetic dyes, preservatives","Fragrance-free products, potassium sorbate, sodium benzoate, mineral-based colorants (iron oxides, titanium dioxide)"
+IL-4,TT,"Cytokine production, allergic responses","Fragrances, preservatives","Allergen-free preservatives (phenoxyethanol, sodium phytate), oat extract (colloidal oatmeal)"
+SOD2,TT,"Antioxidant protection, free radical management","Antioxidants (vitamin C, coenzyme Q10)","Tetrahexyldecyl ascorbate, resveratrol, Centella Asiatica (Cica)"
+GPX1,TT,Reduces oxidative damage,"Antioxidants (vitamin E, ascorbic acid)","Ferulic acid, niacinamide, coenzyme Q10"
+TNF,AA,Inflammatory response,"Active treatments (retinoids, AHAs)","Beta-glucan, panthenol, green tea extract (EGCG)"
+NAT2,AA,Detoxification via acetylation,"Synthetic dyes, preservatives (parabens)","Plant-based dyes, eco-friendly preservatives (radish root ferment, rosemary extract, lactic acid)"

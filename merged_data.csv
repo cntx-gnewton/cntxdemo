@@ -1,0 +1,9 @@
+,rsid,Chromosome,Position,Genotype,Gene,Normal Genotypes,Risk Genotypes,Risk Description
+0,rs1050450,3,49369838,AA,GPX1,CC,"TT,CT","Lower glutathione activity, leading to sensitivity to oxidative stress and antioxidants."
+1,rs2243250,5,132037053,CC,IL-4,CC,"TT,CT","Increased immune response, higher risk of allergies, inflammation, and eczema from common irritants."
+2,rs1800629,6,31651010,GG,TNF,GG,"AA,GA","Elevated inflammatory response, higher risk of irritation from active ingredients."
+3,rs9275596,6,32789609,CT,HLA-DQA1,GG,"AA,GA","Higher risk of allergic reactions to fragrances, preservatives, and colorants."
+4,rs4880,6,160033862,AG,SOD2,CC,"TT,CT","Reduced antioxidant activity, making skin more vulnerable to oxidative stress and irritation."
+5,rs1801280,8,18302134,--,NAT2,GG,"AA,GA","Slow acetylation, leading to increased allergic reactions or sensitivity to synthetic dyes and preservatives."
+6,rs1126809,11,88657609,GG,TYR,AA,"GG,AG","Altered melanin production, potentially leading to inconsistent pigmentation treatment results."
+7,rs1048943,15,72800038,TT,CYP1A1,TT,"CC,TC","Reduced ability to metabolize substances like benzoyl peroxide and salicylic acid, leading to irritation."

@@ -1,0 +1,11 @@
+﻿Gene,rsID,Genotypes,Risk GT,Risk Description
+FLG,rs61816761,"TT (normal), TC, CC",CC,"Compromised skin barrier, higher risk of dryness, eczema, and irritation from surfactants and exfoliants."
+RAR,rs655782,"AA (normal), AG, GG",GG,"Increased sensitivity to retinoids, leading to dryness, peeling, or irritation."
+CYP1A1,rs1048943,"TT (normal), TC, CC",CC,"Reduced ability to metabolize substances like benzoyl peroxide and salicylic acid, leading to irritation."
+TYR,rs1126809,"AA (normal), AG, GG",GG,"Altered melanin production, potentially leading to inconsistent pigmentation treatment results."
+HLA-DQA1,rs9275596,"GG (normal), GA, AA",AA,"Higher risk of allergic reactions to fragrances, preservatives, and colorants."
+IL-4,rs2243250,"CC (normal), CT, TT",TT,"Increased immune response, higher risk of allergies, inflammation, and eczema from common irritants."
+SOD2,rs4880,"CC (normal), CT, TT",TT,"Reduced antioxidant activity, making skin more vulnerable to oxidative stress and irritation."
+GPX1,rs1050450,"CC (normal), CT, TT",TT,"Lower glutathione activity, leading to sensitivity to oxidative stress and antioxidants."
+TNF,rs1800629,"GG (normal), GA, AA",AA,"Elevated inflammatory response, higher risk of irritation from active ingredients."
+NAT2,rs1801280,"GG (normal), GA, AA",AA,"Slow acetylation, leading to increased allergic reactions or sensitivity to synthetic dyes and preservatives."
