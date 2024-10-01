@@ -251,6 +251,7 @@ if st.button("Submit"):
 
     for ingredient in ingredient_list:
         ingredient_lower = ingredient.lower()
+        st.write(ingredient)
         if ingredient_lower in flagged_ingredients:
             # Get risk description and alternative ingredients
             info = ingredient_info.get(ingredient_lower, {})
