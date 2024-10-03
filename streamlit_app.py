@@ -5,7 +5,7 @@ import re
 
 
 # Title of the application
-st.title("Skin Profile Assessment")
+st.title("Cosnetix Demo")
 
 # Section: Environmental Factors Questionnaire
 st.header("Environmental Factors Questionnaire")
@@ -62,13 +62,13 @@ ingredient_allergies = st.text_area(
 )
 
 # Section: Input Ingredients
-st.header("Input Ingredients")
+# st.header("Input Ingredients")
 
 # Text area for listing ingredients
-input_ingredients = st.text_area(
-    "List the ingredients (separated by commas):"
-)
-
+# input_ingredients = st.text_area(
+#     "List the ingredients (separated by commas):"
+# )
+input_ingredients = ""
 # Section: Upload 23andMe Genome Data
 st.header("Upload Your 23andMe Genome Data")
 
@@ -95,6 +95,7 @@ if genome_file is not None:
     # Show a sample of the data
     st.write(genome_data.head())
 
+
 # Submit button
 if st.button("Submit"):
     st.write("Processing your data...")
@@ -107,20 +108,20 @@ if st.button("Submit"):
     ]
 
     # Process input ingredients
-    ingredient_list = [
+    input_ingredient_list = [
         ingredient.strip()
         for ingredient in input_ingredients.split(",")
         if ingredient.strip()
     ]
 
     # Convert ingredient list to lowercase for comparison
-    ingredient_list_lower = [ingredient.lower()
-                             for ingredient in ingredient_list]
-    
+    input_ingredient_list_lower = [ingredient.lower()
+                                   for ingredient in input_ingredient_list]
+
     # Initialize flagged ingredients and ingredient info
     flagged_ingredients = []
     ingredient_info = {}
-    
+
     # Process genome data
     if genome_data is not None:
         # Read the SNP mapping table
@@ -131,18 +132,14 @@ if st.button("Submit"):
                 'genotype': 'Genotype'
             })
             snp_mapping = pd.read_csv('snp_mapping.csv')
-            st.write("SNP mapping table loaded.")
 
             # Merge genome data with SNP mapping table on 'rsid'
             merged_data = pd.merge(
                 genome_data, snp_mapping, on='rsid', how='inner')
             st.write(f"Found {len(merged_data)} matching SNPs.")
-
-            # Display the merged data
-            st.write(merged_data.head())
-
+            columns = ['rsid', 'Chromosome', 'Position', 'Genotype', 'Gene']
+            st.write(merged_data[columns].set_index('rsid'))
             # Placeholder for further analysis
-            # You can add code here to analyze the merged data
             snp_ingredient_mapping = pd.read_csv(
                 'snp_ingredient_mapping.csv').drop(columns={'Genotype'})
             merged_ingredient_data = pd.merge(
@@ -152,7 +149,6 @@ if st.button("Submit"):
                 # Extract risk genotypes from the 'Risk Genotypes' column
                 risk_genotypes = re.findall(
                     r'\b\w+\b', str(row['Risk Genotypes']))
-                # risk_genotypes = [rgt.strip() for rgt in row['Risk Genotypes'].split()]
                 user_genotype = row['Genotype']
                 return user_genotype in risk_genotypes
 
@@ -163,19 +159,32 @@ if st.button("Submit"):
             # Display the filtered data
             st.write(
                 f"Found {len(filtered_data)} SNPs with matching risk genotypes.")
-            st.write(filtered_data)
-            
-            
+            columns = [
+                "Gene", "Risk Description", "Affected Ingredients", "Alternative Ingredients"
+            ]
+            filtered_data = filtered_data[columns]
+            # filtered_data = filtered_data.set_index("Gene")
+            # Apply text wrapping to the DataFrame
+            styled_df = filtered_data.style.set_properties(**{
+                'white-space': 'pre-wrap'
+            })
+
+            # Display the styled DataFrame
+            st.write(styled_df.to_html(), unsafe_allow_html=True)
+
+            # Compile list of affected ingredients
             affected_ingredients = set()
             for ingredients in filtered_data['Affected Ingredients']:
                 if pd.notna(ingredients):
-                    ingredients_list = [i.strip().lower() for i in re.split(r',\s*', ingredients)]
+                    ingredients_list = [i.strip().lower()
+                                        for i in re.split(r',\s*', ingredients)]
                     affected_ingredients.update(ingredients_list)
 
             # Map ingredients to risk descriptions and alternatives
             for idx, row in filtered_data.iterrows():
                 if pd.notna(row['Affected Ingredients']):
-                    ingredients_list = [i.strip().lower() for i in re.split(r',\s*', row['Affected Ingredients'])]
+                    ingredients_list = [i.strip().lower() for i in re.split(
+                        r',\s*', row['Affected Ingredients'])]
                     for ingredient in ingredients_list:
                         ingredient_info[ingredient] = {
                             'Risk Description': row['Risk Description'],
@@ -183,23 +192,18 @@ if st.button("Submit"):
                         }
 
             # Identify and flag ingredients in user's list
-            for ingredient in ingredient_list_lower:
+            for ingredient in input_ingredient_list_lower:
                 if ingredient in affected_ingredients:
                     flagged_ingredients.append(ingredient)
 
-            # Debugging statements
-            # st.write("Affected Ingredients from SNP Analysis:", affected_ingredients)
-            # st.write("Flagged Ingredients in User's List:", flagged_ingredients)
-            # st.write("Ingredient Info Mapping:", ingredient_info)
-
         except FileNotFoundError:
-            st.error("SNP mapping file not found. Please ensure 'snp_mapping.csv' is in the app directory.")
+            st.error(
+                "SNP mapping file not found. Please ensure 'snp_mapping.csv' is in the app directory.")
     else:
         st.warning("No genome data to process.")
 
     # Section: Display Ingredients with Highlighted Allergens
-    st.header("Ingredients Analysis")
-
+    # st.header("Ingredients Analysis")
     # CSS for tooltip functionality
     st.markdown(
         """
@@ -249,14 +253,18 @@ if st.button("Submit"):
         unsafe_allow_html=True,
     )
 
-    for ingredient in ingredient_list:
+    # st.write(input_ingredient_list)
+
+    # Display the ingredients
+    for ingredient in input_ingredient_list:
         ingredient_lower = ingredient.lower()
-        st.write(ingredient)
         if ingredient_lower in flagged_ingredients:
             # Get risk description and alternative ingredients
             info = ingredient_info.get(ingredient_lower, {})
-            risk_description = info.get('Risk Description', 'No description available.')
-            alternatives = info.get('Alternative Ingredients', 'No alternatives available.')
+            risk_description = info.get(
+                'Risk Description', 'No description available.')
+            alternatives = info.get(
+                'Alternative Ingredients', 'No alternatives available.')
 
             # Create tooltip content
             tooltip_content = f"<strong>Risk:</strong> {risk_description}<br><strong>Alternatives:</strong> {alternatives}"
@@ -277,15 +285,9 @@ if st.button("Submit"):
                 f"<span style='color:red'>{ingredient}</span>",
                 unsafe_allow_html=True,
             )
-
-            
         else:
-            # st.write(ingredient)
-            st.markdown(
-                f"""
-                <div class="tooltip">
-                    <span style="color:white">{ingredient}</span>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            # Display ingredient normally
+            st.write(ingredient)
+
+    # Placeholder for further analysis
+    # You can add code here to analyze other data
