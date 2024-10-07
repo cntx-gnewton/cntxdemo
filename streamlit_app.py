@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 import io
 import re
-
+from os.path import join
+from processing import * 
 
 # Title of the application
 st.title("Cosnetix Demo")
@@ -82,17 +83,11 @@ genome_data = None
 
 # Check if a file has been uploaded
 if genome_file is not None:
-    st.success("Genome file uploaded successfully!")
+    
     # Read the genome file into a DataFrame
-    genome_data = pd.read_csv(
-        genome_file,
-        comment='#',
-        sep='\t',
-        header=None,
-        names=['rsid', 'chromosome', 'position', 'genotype']
-    )
+    st.success("Genome file uploaded successfully!")
+    genome_data = get_genome_data(genome_file)
     st.write("Genome data loaded.")
-    # Show a sample of the data
     st.write(genome_data.head())
 
 
@@ -126,46 +121,19 @@ if st.button("Submit"):
     if genome_data is not None:
         # Read the SNP mapping table
         try:
-            genome_data = genome_data.rename(columns={
-                'chromosome': 'Chromosome',
-                'position': 'Position',
-                'genotype': 'Genotype'
-            })
-            snp_mapping = pd.read_csv('snp_mapping.csv')
-
-            # Merge genome data with SNP mapping table on 'rsid'
-            merged_data = pd.merge(
-                genome_data, snp_mapping, on='rsid', how='inner')
-            st.write(f"Found {len(merged_data)} matching SNPs.")
-            columns = ['rsid', 'Chromosome', 'Position', 'Genotype', 'Gene']
-            st.write(merged_data[columns].set_index('rsid'))
-            # Placeholder for further analysis
-            snp_ingredient_mapping = pd.read_csv(
-                'snp_ingredient_mapping.csv').drop(columns={'Genotype'})
-            merged_ingredient_data = pd.merge(
-                merged_data, snp_ingredient_mapping, on='Gene', how='inner')
-
-            def genotype_match(row):
-                # Extract risk genotypes from the 'Risk Genotypes' column
-                risk_genotypes = re.findall(
-                    r'\b\w+\b', str(row['Risk Genotypes']))
-                user_genotype = row['Genotype']
-                return user_genotype in risk_genotypes
 
             # Apply the filtering
-            filtered_data = merged_ingredient_data[merged_ingredient_data.apply(
-                genotype_match, axis=1)]
+            user_risk_df = get_risk_genotypes(genome_data)
 
             # Display the filtered data
-            st.write(
-                f"Found {len(filtered_data)} SNPs with matching risk genotypes.")
+            st.write(f"Found {len(user_risk_df)} SNPs with matching risk genotypes.")
             columns = [
                 "Gene", "Risk Description", "Affected Ingredients", "Alternative Ingredients"
             ]
-            filtered_data = filtered_data[columns]
-            # filtered_data = filtered_data.set_index("Gene")
+            user_risk_df = user_risk_df[columns]
+
             # Apply text wrapping to the DataFrame
-            styled_df = filtered_data.style.set_properties(**{
+            styled_df = user_risk_df.style.set_properties(**{
                 'white-space': 'pre-wrap'
             })
 
@@ -174,14 +142,14 @@ if st.button("Submit"):
 
             # Compile list of affected ingredients
             affected_ingredients = set()
-            for ingredients in filtered_data['Affected Ingredients']:
+            for ingredients in user_risk_df['Affected Ingredients']:
                 if pd.notna(ingredients):
                     ingredients_list = [i.strip().lower()
                                         for i in re.split(r',\s*', ingredients)]
                     affected_ingredients.update(ingredients_list)
 
             # Map ingredients to risk descriptions and alternatives
-            for idx, row in filtered_data.iterrows():
+            for idx, row in user_risk_df.iterrows():
                 if pd.notna(row['Affected Ingredients']):
                     ingredients_list = [i.strip().lower() for i in re.split(
                         r',\s*', row['Affected Ingredients'])]
@@ -197,8 +165,7 @@ if st.button("Submit"):
                     flagged_ingredients.append(ingredient)
 
         except FileNotFoundError:
-            st.error(
-                "SNP mapping file not found. Please ensure 'snp_mapping.csv' is in the app directory.")
+            st.error("SNP mapping file not found. Please ensure 'snp_mapping.csv' is in the app directory.")
     else:
         st.warning("No genome data to process.")
 
