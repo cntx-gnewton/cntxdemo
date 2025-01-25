@@ -28,6 +28,17 @@ pollution_exposure = st.selectbox(
     "How polluted is your environment?", ["Low", "Moderate", "High"]
 )
 
+# Humidity level
+humidity_level = st.selectbox(
+    "What is the humidity level in your environment?", [
+        "Dry", "Moderate", "Humid"]
+)
+
+# Smoking/Vaping status
+smoking_status = st.selectbox(
+    "Do you smoke or vape?", ["No", "Yes"]
+)
+
 # Stress level
 stress_level = st.selectbox(
     "What is your current stress level?", ["Low", "Moderate", "High"]
@@ -95,6 +106,25 @@ if genome_file is not None:
 if st.button("Submit"):
     st.write("Processing your data...")
 
+    user_environment = []
+    if stress_level == "High":
+        user_environment.append('stress')
+    if smoking_status == "Yes":
+        user_environment.append('smoking')
+    if pollution_exposure == "High":
+        user_environment.append('pollution')
+    if humidity_level == "Humid":
+        user_environment.append('humid_climate')
+    if humidity_level == "Dry":
+        user_environment.append('dry_climate')
+    if sun_exposure == "High":
+        user_environment.append('uv_exposure')
+    
+    st.write(user_environment)
+    
+    
+    
+    
     # Process ingredient allergies
     allergy_list = [
         allergy.strip().lower()
