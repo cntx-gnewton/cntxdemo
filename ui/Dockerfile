@@ -1,10 +1,13 @@
 FROM python:3.11
+
 WORKDIR /code
+
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
+
 COPY app /code/app
 COPY data /code/data
+
 EXPOSE 8080
 
-
-CMD ["streamlit","run","--server.port","8080","/code/app/main.py"]
+CMD ["streamlit", "run", "--server.port", "8080", "--server.address", "0.0.0.0", "/code/app/main.py"]
